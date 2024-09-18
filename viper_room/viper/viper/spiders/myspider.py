@@ -14,29 +14,29 @@ class ViperSpider(scrapy.Spider):
                 'indent': 4,
             },
         },
-        'DOWNLOAD_DELAY': 2,  # oneskorenie 2 sekundy medzi požiadavkami
-        'CONCURRENT_REQUESTS': 1,  # maximálny počet súčasných požiadaviek
+        'DOWNLOAD_DELAY': 2,  # 2-second delay between requests
+        'CONCURRENT_REQUESTS': 1,  # maximum number of concurrent requests
     }
 
     def parse(self, response):
         self.log(f"Processing the website: {response.url}")
 
-        # Extrakcia udalostí
+        # Extracting events
         events = response.xpath('//ul[@class="events_list"]/li')
 
         for event in events:
-            # Extrakcia názvu udalosti
+            # Extracting event title
             title = event.xpath('.//h2[@class="event_title"]/a/text()').get().strip()
 
-            # Extrakcia odkazu na udalosť
+            # Extracting event link
             link = event.xpath('.//h2[@class="event_title"]/a/@href').get()
             event_url = response.urljoin(link)
 
-            # Extrakcia dátumu udalosti
+            # Extracting event date
             date = event.xpath('.//div[@class="event_date_monthyear"]/text()').get().strip()
 
-            # Statická adresa
-            location = 'Viper Room Vienna, Landstrasser Hauptstr. 38, 1030 Wien, Österreich'
+            # Static address
+            location = 'Viper Room Vienna, Landstrasser Hauptstr. 38, 1030 Wien, Austria'
 
             yield {
                 'title': title,
